@@ -1,9 +1,12 @@
 ﻿
-Public Class frmNotification
+Imports Notify
+
+Public Class Notification
+    Implements INotify
 
 
-    'Initialising log4net logger for this class and getting class name from reflection
-   ' Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(Reflection.MethodBase.GetCurrentMethod().DeclaringType)
+    'Initializing log4net logger for this class and getting class name from reflection
+    ' Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(Reflection.MethodBase.GetCurrentMethod().DeclaringType)
 
 
     'THIS FORM WILL BE USED TO SHOW NOTIFICATIONS WHICH DO NOT REQUITRE USER INTERACTION.
@@ -29,6 +32,8 @@ Public Class frmNotification
     Dim NotificationLocation As New Point
     Dim POINT_X As Integer
     Dim POINT_Y As Integer
+    Private Event OnNotify As INotify.NotifyEventHandler Implements INotify.Notify
+
 
 
     'INITIALISATIONS FOR TRACKING AND LOGGING APPLICATION EVENTS, QUERIES, EXCEPTIONS ETC...
@@ -45,7 +50,10 @@ Public Class frmNotification
         RegisterNotification(False)
         Close()
     End Sub
-    Public Sub ShowNotification(ByVal NotificationMessage As String, ByVal NotificationTitle As String, ByVal NotficationPNG_IconName As String, Optional ByVal Heading As String = "")
+    Private Sub Notify(ByVal sender As Object, ByVal e As EventArgs) Handles Me.OnNotify
+        ShowNotification(sender, e)
+    End Sub
+    Public Sub ShowNotification(ByVal sender As Object, ByVal f As EventArgs) Implements INotify.ShowNotification
         RegisterNotification(True)
 
         ScreenDiametions(POINT_X, POINT_Y)
@@ -54,16 +62,22 @@ Public Class frmNotification
         NotificationLocation.X = POINT_X - 500
         NotificationLocation.Y = POINT_Y
 
+        Dim e As PopUpNotifyEventArgs = f
+        NotificationUI.Text = e.Title
+        lblNotificationMessage.Text = e.Message
+        lblHeading.Text = e.Heading
 
-        NotificationUI.Text = NotificationTitle
-        lblNotificationMessage.Text = NotificationMessage
-        lblHeading.Text = Heading
-
-        NotificationIcon.Image = Image.FromFile(GetImagePath(NotficationPNG_IconName))
+        ' NotificationIcon.Image = Image.FromFile(GetImagePath(e.PngIconName))
 
 
         Location = NotificationLocation     'SETTING INITIAL LOCATION OF NOTIFICATION FORM.
+
+        If AnimationControl Is Nothing Then
+            AnimationControl = New Timer
+            LifeTime = New Timer
+        End If
         AnimationControl.Interval = 100     'SETTING INTERVAL FOR ANMATION.
+
 
         LifeTime.Interval = LifeTimeInMilliseconds
         LifeTime.Enabled = True
@@ -110,11 +124,11 @@ Public Class frmNotification
     End Sub
 
     Private Sub NotificationIcon_Click(sender As Object, e As EventArgs) Handles NotificationIcon.Click
-        Dim Notify As New frmNotification
-        Notify.ShowNotification(NotificationMessage:="Hello, This is a notification.",
-            NotificationTitle:="Test Notification",
-            NotficationPNG_IconName:="LanTech",
-            Heading:="Testing")
+
+        RaiseEvent OnNotify(Me, New PopUpNotifyEventArgs With {.Heading = "Testing",
+                          .Message = "Non intrusive pop-up notification message. ",
+                          .PngIconName = "LanTech",
+                          .Title = "Testing"})
 
     End Sub
     Sub RegisterNotification(ByVal IsLoading As Boolean)
@@ -193,4 +207,5 @@ Public Class frmNotification
         'ON MOUSE LEAVE. THE FADING OUT OF THE NOTIFICATION WILL START.
         LifeTime.Enabled = True
     End Sub
+
 End Class

@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class frmNotification
+Partial Class Notification
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -102,7 +102,7 @@ Partial Class frmNotification
         'NotificationIcon
         '
         Me.NotificationIcon.Cursor = System.Windows.Forms.Cursors.Default
-        Me.NotificationIcon.EditValue = Global.SwatIncNotifications.My.Resources.Resources.SocketDisconnected
+        Me.NotificationIcon.EditValue = Global.SwatInc.Notifications.My.Resources.Resources.SocketDisconnected
         Me.NotificationIcon.Location = New System.Drawing.Point(5, 25)
         Me.NotificationIcon.Name = "NotificationIcon"
         Me.NotificationIcon.Properties.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder

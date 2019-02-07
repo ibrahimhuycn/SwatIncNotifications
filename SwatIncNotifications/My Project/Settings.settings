@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ImageRootDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Users\ibrah\OneDrive\Documents\Visual Studio 2015\Projects\LISmini\LISmini\Resources\</Value>
+      <Value Profile="(Default)">C:\Users\ibrah\source\repos\LISmini\LISmini\Resources\</Value>
     </Setting>
     <Setting Name="AlreadyActiveNotificationsMonitor" Type="System.String" Scope="User">
       <Value Profile="(Default)">0</Value>
